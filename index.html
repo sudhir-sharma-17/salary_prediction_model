@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Analytics Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f2f4f5;
+            color: #1e293b;
+        }
+        
+        .form-container {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .form-container:hover {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .input-field:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+        
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #ffffff;
+            min-width: 100%;
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 0.375rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .dropdown-content a {
+            color: #1e293b;
+            padding: 8px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.2s;
+        }
+        
+        .dropdown-content a:hover {
+            background-color: #f1f5f9;
+        }
+        
+        .show {
+            display: block;
+        }
+        
+        .result-card {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease-in-out;
+        }
+        
+        .result-card.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .education-level {
+            padding-left: 20px;
+        }
+        
+        .education-level-option {
+            padding: 8px 15px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .education-level-option:hover {
+            background-color: #f1f5f9;
+        }
+        .Note{
+            color:red
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <div class="form-container w-full max-w-2xl bg-white rounded-xl p-6">
+            <div class="flex items-center justify-center mb-6">
+                <div class="w-16 h-16 rounded-full bg-indigo-100 flex items-center justify-center mr-4">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/04c7f99a-f320-427e-a193-211bb2ec0a2a.png" alt="Employee Analytics Dashboard" class="w-12 h-12 object-contain"/>
+                </div>
+                <h1 class="text-3xl font-bold text-gray-800">Employee Analytics</h1>
+            </div>
+            
+            <form id="employeeForm" class="space-y-5">
+                <!-- Employee Name -->
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Employee Name</label>
+                    <input type="text" id="name" name="name" required
+                           class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                
+                <!-- Education Dropdown (Multi-level) -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Education Level</label>
+                    <div class="dropdown w-full">
+                        <button onclick="toggleDropdown('educationDropdown')" type="button"
+                                class="input-field w-full text-left px-4 py-2 border border-gray-300 rounded-lg focus:outline-none flex justify-between items-center">
+                            <span id="educationLabel">Select Education Level</span>
+                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div id="educationDropdown" class="dropdown-content mt-1 w-full">
+                            <div class="education-level">
+                                <div onclick="selectEducation('High School', 'educationDropdown')" class="education-level-option">High School</div>
+                                <div onclick="selectEducation('Bachelor\'s Degree', 'educationDropdown')" class="education-level-option">Bachelor's Degree</div>
+                                <div onclick="selectEducation('Master\'s Degree', 'educationDropdown')" class="education-level-option">Master's Degree</div>
+                                <div onclick="selectEducation('PhD', 'educationDropdown')" class="education-level-option">PhD</div>
+                                
+                            </div>
+                        </div>
+                        <input type="hidden" id="education" name="education">
+                    </div>
+                </div>
+                
+                <!-- State Dropdown -->
+                
+
+
+                <div>
+                    <label for="State" class="block text-sm font-medium text-gray-700 mb-1">State</label>
+                    <select id="State" name="State" required
+                            class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="">Select State</option>
+                        <option value="Andhra Pradesh">Andhra Pradesh</option>
+                        <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                        <option value="Assam">Assam</option>
+                        <option value="Bihar">Bihar</option>
+                        <option value="Chhattisgarh">Chhattisgarh</option>
+                        <option value="Goa">Goa</option>
+                        <option value="Gujarat">Gujarat</option>
+                        <option value="Haryana">Haryana</option>
+                        <option value="Himachal Pradesh">Himachal Pradesh</option>
+                        <option value="Jharkhand">Jharkhand</option>
+                        <option value="Karnataka">Karnataka</option>
+                        <option value="Kerala">Kerala</option>
+                        <option value="Madhya Pradesh">Madhya Pradesh</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Manipur">Manipur</option>
+                        <option value="Meghalaya">Meghalaya</option>
+                        <option value="Mizoram">Mizoram</option>
+                        <option value="Nagaland">Nagaland</option>
+                        <option value="Odisha">Odisha</option>
+                        <option value="Punjab">Punjab</option>
+                        <option value="Rajasthan">Rajasthan</option>
+                        <option value="Sikkim">Sikkim</option>
+                        <option value="Tamil Nadu">Tamil Nadu</option>
+                        <option value="Telangana">Telangana</option>
+                        <option value="Tripura">Tripura</option>
+                        <option value="Uttar Pradesh">Uttar Pradesh</option>
+                        <option value="Uttarakhand">Uttarakhand</option>
+                        <option value="West Bengal">West Bengal</option>
+                                                
+                    </select>
+                </div>
+                <!-- Location Dropdowm-->
+                <div>
+                    <label for="Location" class="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                    <select id="Location" name="Location" required
+                            class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="">Select Location</option>
+                        <option value="Urban">Urban</option>
+                        <option value="Rural">Rural</option>
+                        <option value="Sub-Urban">Sub-Urban</option>
+                        
+                    </select>
+                </div>
+                
+                <!-- Age Input -->
+                <div>
+                    <label for="age" class="block text-sm font-medium text-gray-700 mb-1">Age</label>
+                    <input type="number" id="age" name="age" min="18" max="70" required
+                           class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                
+                <!-- Department Dropdown -->
+                <div>
+                    <label for="department" class="block text-sm font-medium text-gray-700 mb-1">Department</label>
+                    <select id="department" name="department" required
+                            class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="">Select Department</option>
+                        <option value="Manager">Manager</option>
+                        <option value="Director">Director</option>
+                        <option value="Analyst">Analyst</option>
+                        <option value="Engineer">Information Technology</option>
+                        
+                        
+                    </select>
+                </div>
+                
+                <!-- Gender Selection -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Gender</label>
+                    <div class="flex space-x-6 mt-2">
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="gender" value="Male" required
+                                   class="text-indigo-600 focus:ring-indigo-500">
+                            <span class="ml-2">Male</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="gender" value="Female"
+                                   class="text-indigo-600 focus:ring-indigo-500">
+                            <span class="ml-2">Female</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="gender" value="Other"
+                                   class="text-indigo-600 focus:ring-indigo-500">
+                            <span class="ml-2">Other</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap gap-3 pt-4">
+                    <button type="button" onclick="predictSalary()"
+                            class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105">
+                        Predict Salary
+                    </button>
+                    <button type="button" onclick="showModelAccuracy()"
+                            class="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105">
+                        Model Accuracy
+                    </button>
+                    <button type="reset" onclick="clearForm()" id="clearBtn"
+                            class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105">
+                        Clear
+                    </button>
+                </div>
+
+                <div class="Note"><p>NOTE: Please note that salary predicted is just an approximation.<br>
+                Actual salary might differ.</p></div>
+            </form>
+            
+            <!-- Result Display Area -->
+            <div id="resultContainer" class="result-card mt-6 p-4 bg-gray-50 rounded-lg hidden">
+                <div id="resultContent" class="text-gray-800"></div>
+                <div class="flex justify-center gap-4 mt-4">
+                    <button type="button" onclick="convertCurrency('USD')"
+                            class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition duration-300 ease-in-out">
+                        View in USD
+                    </button>
+                    <button type="button" onclick="convertCurrency('INR')"
+                            class="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg transition duration-300 ease-in-out">
+                        View in INR
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Model Accuracy Modal -->
+            <div id="accuracyModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+                <div class="bg-white rounded-lg p-6 max-w-md w-full">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-bold text-gray-800">Model Accuracy</h3>
+                        <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm font-medium text-gray-700">Accuracy</span>
+                                <span class="text-sm font-medium text-gray-700">95%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-green-600 h-2.5 rounded-full" style="width: 95%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 text-sm text-gray-600">
+                        <p>Accuracy based on test dataset of more than 1000 employee records.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+    // Global variable to store the predicted salary (in INR per month)
+    let predictedSalaryINR = 0;
+    const USD_TO_INR_RATE = 83.30; // Approximate conversion rate
+
+    // Toggle dropdown visibility
+    function toggleDropdown(dropdownId) {
+        document.getElementById(dropdownId).classList.toggle('show');
+    }
+
+    // Close dropdowns when clicking outside
+    window.addEventListener('click', function (event) {
+    const isDropdownBtn = event.target.closest('.dropdown button');
+    if (!isDropdownBtn) {
+        document.querySelectorAll('.dropdown-content').forEach(dropdown => {
+                dropdown.classList.remove('show');
+            });
+        }
+    });
+
+
+    // Select education level
+    function selectEducation(value, dropdownId) {
+        document.getElementById('educationLabel').textContent = value;
+        document.getElementById('education').value = value;
+        document.getElementById(dropdownId).classList.remove('show');
+    }
+
+    // Predict Salary
+    async function predictSalary() {
+        const education = document.getElementById('education').value;
+        const location = document.getElementById('Location').value;
+        const jobTitle = document.getElementById('department').value;
+        const age = parseInt(document.getElementById('age').value);
+        const gender = document.querySelector('input[name="gender"]:checked')?.value;
+        const state = document.getElementById('State').value;
+        const experience = 3;  // static or editable
+
+        if (!education || !location || !jobTitle || !age || !gender || !state) {
+            showResult("❌ Please fill all required fields", "text-red-600");
+            return;
+        }
+
+        const data = {
+            "Education": education,
+            "Experience": experience,
+            "Location": location,
+            "Job_Title": jobTitle,
+            "Age": age,
+            "Gender": gender
+        };
+
+        try {
+            const response = await fetch("http://127.0.0.1:5000/predict", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            predictedSalaryINR = result.salary * 12; // Convert from monthly to yearly salary and store in INR
+
+            // Initially display in INR
+            displaySalary(predictedSalaryINR, 'INR', jobTitle, education, state, location, age, gender);
+
+        } catch (error) {
+            showResult("❌ Failed to connect to backend API", "text-red-600");
+            console.error("Fetch error:", error);
+        }
+    }
+
+    // Function to display salary in the chosen currency
+    function displaySalary(salary, currency, jobTitle, education, state, location, age, gender) {
+        let formattedSalary;
+        let currencySymbol;
+
+        if (currency === 'USD') {
+            const salaryUSD = salary / USD_TO_INR_RATE;
+            formattedSalary = salaryUSD.toLocaleString('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                maximumFractionDigits: 0
+            });
+            currencySymbol = 'USD';
+        } else if (currency === 'INR') {
+            formattedSalary = salary.toLocaleString('en-IN', {
+                style: 'currency',
+                currency: 'INR',
+                maximumFractionDigits: 0
+            });
+            currencySymbol = 'INR';
+        }
+
+        const resultHTML = `
+            <div class="flex items-center justify-between mb-2">
+                <div>
+                    <h4 class="font-bold text-lg">Salary Prediction</h4>
+                    <p class="text-gray-600">Based on provided employee details</p>
+                </div>
+                <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/cb54d1d0-e463-4f57-b079-5e9ca14e6b84.png" alt="Salary prediction" class="w-10 h-10"/>
+                </div>
+            </div>
+            <div class="bg-white p-4 rounded-lg mt-3 border border-gray-200">
+                <div class="text-center py-4">
+                    <p class="text-4xl font-bold text-indigo-600 mb-2">${formattedSalary}</p>
+                    <p class="text-gray-500">per year (${currencySymbol})</p>
+                </div>
+                <div class="flex justify-between text-sm text-gray-600 mt-3">
+                    <div>
+                        <p>Department: <span class="font-medium">${jobTitle}</span></p>
+                        <p>Education: <span class="font-medium">${education}</span></p>
+                        
+                    </div>
+                    
+                    <div>
+                        <p>State: <span class="font-medium">${state}</span></p>
+                        <p>Location: <span class="font-medium">${location}</span></p>
+                        <p>Age: <span class="font-medium">${age}</span></p>
+                        <p>Gender: <span class="font-medium">${gender}</span></p>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        showResult(resultHTML, '');
+    }
+
+    // Function to convert and display salary
+    function convertCurrency(currency) {
+        if (predictedSalaryINR === 0) {
+            showResult("Please predict salary first.", "text-red-600");
+            return;
+        }
+
+        const jobTitle = document.getElementById('department').value;
+        const education = document.getElementById('education').value;
+        const state = document.getElementById('State').value;
+        const location = document.getElementById('Location').value;
+        const age = parseInt(document.getElementById('age').value);
+        const gender = document.querySelector('input[name="gender"]:checked')?.value;
+
+        displaySalary(predictedSalaryINR, currency, jobTitle, education, state, location, age, gender);
+    }
+
+    // Show model accuracy modal
+    async function showModelAccuracy() {
+        try {
+            const response = await fetch("http://127.0.0.1:5000/accuracy");
+            const data = await response.json();
+            document.querySelector("#accuracyModal .text-sm.font-medium.text-gray-700:last-child").textContent = data.accuracy + "%";
+            document.querySelector("#accuracyModal .bg-green-600").style.width = data.accuracy + "%";
+            document.getElementById("accuracyModal").classList.remove("hidden");
+        } catch (error) {
+            alert("Could not load model accuracy.");
+            console.error(error);
+        }
+    }
+
+    // Close modal
+    function closeModal() {
+        document.getElementById('accuracyModal').classList.add('hidden');
+    }
+
+    // Clear form
+    function clearForm() {
+        document.getElementById('employeeForm').reset();
+        document.getElementById('educationLabel').textContent = 'Select Education Level';
+        document.getElementById('education').value = '';
+        document.getElementById('resultContainer').classList.add('hidden');
+        predictedSalaryINR = 0; // Reset predicted salary
+
+        const inputs = document.querySelectorAll('.input-field');
+        inputs.forEach(input => input.classList.remove('border-red-500'));
+    }
+
+    // Show result
+    function showResult(content, textColor) {
+        const container = document.getElementById('resultContainer');
+        const contentDiv = document.getElementById('resultContent');
+
+        contentDiv.innerHTML = content;
+        contentDiv.className = textColor || 'text-gray-800';
+
+        container.classList.remove('hidden');
+        setTimeout(() => container.classList.add('show'), 10);
+    }
+</script>
+
+</body>
+</html>
