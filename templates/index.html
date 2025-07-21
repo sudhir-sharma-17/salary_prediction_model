@@ -347,7 +347,9 @@
         };
 
         try {
-            const response = await fetch("https://salary-prediction-model-2ob7.onrender.com", {
+            const response = await fetch("https://salary-prediction-model-2ob7.onrender.com/predict", {
+
+
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data)
@@ -442,7 +444,8 @@
     // model accuracy 
     async function showModelAccuracy() {
         try {
-            const response = await fetch("https://salary-prediction-model-2ob7.onrender.com");
+            const response = await fetch("https://salary-prediction-model-2ob7.onrender.com/accuracy");
+
             const data = await response.json();
             document.querySelector("#accuracyModal .text-sm.font-medium.text-gray-700:last-child").textContent = data.accuracy + "%";
             document.querySelector("#accuracyModal .bg-green-600").style.width = data.accuracy + "%";
