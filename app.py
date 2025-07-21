@@ -1,18 +1,23 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import pickle
 import pandas as pd
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS
+CORS(app)
 
 # Load model
 with open("salary_model.pkl", "rb") as f:
     model = pickle.load(f)
 
-#  accuracy
+# Load accuracy
 with open("accuracy.txt", "r") as f:
     accuracy = f.read()
+
+# route for homepage
+@app.route("/")
+def index():
+    return render_template("index.html") 
 
 @app.route("/predict", methods=["POST"])
 def predict():
