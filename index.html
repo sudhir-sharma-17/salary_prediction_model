@@ -108,7 +108,7 @@
                            class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
                 
-                <!-- Education Dropdown (Multi-level) -->
+                <!-- Education Dropdown  -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Education Level</label>
                     <div class="dropdown w-full">
@@ -249,7 +249,7 @@
                 Actual salary might differ.</p></div>
             </form>
             
-            <!-- Result Display Area -->
+            <!-- Result Display  -->
             <div id="resultContainer" class="result-card mt-6 p-4 bg-gray-50 rounded-lg hidden">
                 <div id="resultContent" class="text-gray-800"></div>
                 <div class="flex justify-center gap-4 mt-4">
@@ -264,7 +264,7 @@
                 </div>
             </div>
             
-            <!-- Model Accuracy Modal -->
+            <!-- Model Accuracy -->
             <div id="accuracyModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
                 <div class="bg-white rounded-lg p-6 max-w-md w-full">
                     <div class="flex justify-between items-center mb-4">
@@ -295,11 +295,11 @@
     </div>
     
     <script>
-    // Global variable to store the predicted salary (in INR per month)
+    //predicted salary in INR per month
     let predictedSalaryINR = 0;
-    const USD_TO_INR_RATE = 83.30; // Approximate conversion rate
+    const USD_TO_INR_RATE = 86.32; //Conversion from USD to INR (1 USD ~ 86.32 INR)
 
-    // Toggle dropdown visibility
+    // Toggle dropdown 
     function toggleDropdown(dropdownId) {
         document.getElementById(dropdownId).classList.toggle('show');
     }
@@ -315,14 +315,14 @@
     });
 
 
-    // Select education level
+    // Selection of  education level
     function selectEducation(value, dropdownId) {
         document.getElementById('educationLabel').textContent = value;
         document.getElementById('education').value = value;
         document.getElementById(dropdownId).classList.remove('show');
     }
 
-    // Predict Salary
+    // Salary prediction
     async function predictSalary() {
         const education = document.getElementById('education').value;
         const location = document.getElementById('Location').value;
@@ -330,7 +330,7 @@
         const age = parseInt(document.getElementById('age').value);
         const gender = document.querySelector('input[name="gender"]:checked')?.value;
         const state = document.getElementById('State').value;
-        const experience = 3;  // static or editable
+        const experience = 3;  
 
         if (!education || !location || !jobTitle || !age || !gender || !state) {
             showResult("❌ Please fill all required fields", "text-red-600");
@@ -354,9 +354,9 @@
             });
 
             const result = await response.json();
-            predictedSalaryINR = result.salary * 12; // Convert from monthly to yearly salary and store in INR
+            predictedSalaryINR = result.salary * 12; // Monthly Salary to Yearly Conversion
 
-            // Initially display in INR
+            // Initially Salary in INR
             displaySalary(predictedSalaryINR, 'INR', jobTitle, education, state, location, age, gender);
 
         } catch (error) {
@@ -365,7 +365,7 @@
         }
     }
 
-    // Function to display salary in the chosen currency
+    // Display salary in the chosen currency
     function displaySalary(salary, currency, jobTitle, education, state, location, age, gender) {
         let formattedSalary;
         let currencySymbol;
@@ -422,7 +422,7 @@
         showResult(resultHTML, '');
     }
 
-    // Function to convert and display salary
+    //convert and display salary
     function convertCurrency(currency) {
         if (predictedSalaryINR === 0) {
             showResult("Please predict salary first.", "text-red-600");
@@ -439,7 +439,7 @@
         displaySalary(predictedSalaryINR, currency, jobTitle, education, state, location, age, gender);
     }
 
-    // Show model accuracy modal
+    // model accuracy 
     async function showModelAccuracy() {
         try {
             const response = await fetch("http://127.0.0.1:5000/accuracy");
@@ -464,13 +464,13 @@
         document.getElementById('educationLabel').textContent = 'Select Education Level';
         document.getElementById('education').value = '';
         document.getElementById('resultContainer').classList.add('hidden');
-        predictedSalaryINR = 0; // Reset predicted salary
+        predictedSalaryINR = 0; 
 
         const inputs = document.querySelectorAll('.input-field');
         inputs.forEach(input => input.classList.remove('border-red-500'));
     }
 
-    // Show result
+    // Display result
     function showResult(content, textColor) {
         const container = document.getElementById('resultContainer');
         const contentDiv = document.getElementById('resultContent');
